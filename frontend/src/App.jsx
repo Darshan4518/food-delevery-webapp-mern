@@ -20,7 +20,15 @@ import ErrorPage from "./pages/ErrorPage";
 
 const App = () => {
   return (
-    <ClerkProvider publishableKey="pk_test_dm9jYWwtcGFuZ29saW4tMjYuY2xlcmsuYWNjb3VudHMuZGV2JA">
+    <ClerkProvider
+      publishableKey="pk_test_dm9jYWwtcGFuZ29saW4tMjYuY2xlcmsuYWNjb3VudHMuZGV2JA"
+      signInForceRedirectUrl={
+        "https://darshan-food-delevery-webapp.vercel.app/"
+      }
+      signUpForceRedirectUrl={
+        "https://darshan-food-delevery-webapp.vercel.app/"
+      }
+    >
       <ContextProvider>
         <Router>
           <div className="flex flex-col min-h-screen">
