@@ -16,6 +16,7 @@ import OrderDetails from "./pages/OrderPage";
 import ContactPage from "./pages/ContactPage";
 import AboutPage from "./pages/AboutPage";
 import BlogPage from "./pages/BlogPage";
+import ErrorPage from "./pages/ErrorPage";
 
 const App = () => {
   return (
@@ -27,6 +28,8 @@ const App = () => {
             <main className="flex-grow">
               <Routes>
                 <Route exact path="/" element={<HomePage />}></Route>
+                <Route exact path="*" element={<ErrorPage />}></Route>
+
                 <Route path="/listings" element={<ListingPage />}></Route>
                 <Route
                   path="/cart"
