@@ -21,7 +21,9 @@ const CategoryList = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/categories");
+      const response = await axios.get(
+        "https://darshan-food-delevery-webapp.onrender.com/api/categories"
+      );
       setCategories(response.data);
     } catch (error) {
       console.error(error);
@@ -30,7 +32,9 @@ const CategoryList = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/categories/${id}`);
+      await axios.delete(
+        `https://darshan-food-delevery-webapp.onrender.com/api/categories/${id}`
+      );
       fetchCategories();
     } catch (error) {
       console.error(error);
@@ -49,7 +53,7 @@ const CategoryList = () => {
   const handleSave = async () => {
     try {
       await axios.put(
-        `http://localhost:5000/api/categories/${currentCategory._id}`,
+        `https://darshan-food-delevery-webapp.onrender.com/api/categories/${currentCategory._id}`,
         {
           name: currentCategory.name,
         }

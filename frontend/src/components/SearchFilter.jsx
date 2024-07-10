@@ -34,7 +34,7 @@ const SearchFilter = () => {
 
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/foods/filter/search?query=${query}`
+        `https://darshan-food-delevery-webapp.onrender.com/api/foods/filter/search?query=${query}`
       );
       setFoods(response.data);
     } catch (error) {

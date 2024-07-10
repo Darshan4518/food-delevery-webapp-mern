@@ -10,7 +10,7 @@ const PriceFilter = () => {
   const handlePrice = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/foods/filter/searchByPrice?minPrice=${minPrice}&maxPrice=${maxPrice}`
+        `https://darshan-food-delevery-webapp.onrender.com/api/foods/filter/searchByPrice?minPrice=${minPrice}&maxPrice=${maxPrice}`
       );
       setFoods(response.data);
     } catch (error) {

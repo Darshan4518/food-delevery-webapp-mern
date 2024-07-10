@@ -14,7 +14,10 @@ const CategoryForm = () => {
     formData.append("image", image);
 
     try {
-      await axios.post("http://localhost:5000/api/categories/upload", formData);
+      await axios.post(
+        "https://darshan-food-delevery-webapp.onrender.com/api/categories/upload",
+        formData
+      );
       setName("");
       setImage(null);
     } catch (error) {

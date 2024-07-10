@@ -23,7 +23,7 @@ const FoodForm = () => {
     const fetchCategories = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/categories"
+          "https://darshan-food-delevery-webapp.onrender.com/api/categories"
         );
         setCategories(response.data);
       } catch (error) {
@@ -47,7 +47,10 @@ const FoodForm = () => {
     });
 
     try {
-      await axios.post("http://localhost:5000/api/foods/upload", formData);
+      await axios.post(
+        "https://darshan-food-delevery-webapp.onrender.com/api/foods/upload",
+        formData
+      );
       setName("");
       setDescription("");
       setPrice("");

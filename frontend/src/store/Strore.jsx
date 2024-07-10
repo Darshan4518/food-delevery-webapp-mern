@@ -28,7 +28,9 @@ const ContextProvider = ({ children }) => {
   const fetchFoods = async () => {
     setLoading(true);
     try {
-      const response = await axios.get("http://localhost:5000/api/foods");
+      const response = await axios.get(
+        "https://darshan-food-delevery-webapp.onrender.com/api/foods"
+      );
       setFoods(response.data);
     } catch (error) {
       console.error(error);
@@ -41,7 +43,7 @@ const ContextProvider = ({ children }) => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/foods/filter?category=${selectedCategory}`
+        `https://darshan-food-delevery-webapp.onrender.com/api/foods/filter?category=${selectedCategory}`
       );
       setFoods(response.data);
       console.log(response.data);
@@ -54,7 +56,9 @@ const ContextProvider = ({ children }) => {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/categories");
+      const response = await axios.get(
+        "https://darshan-food-delevery-webapp.onrender.com/api/categories"
+      );
       const categoriesMap = response.data.reduce((acc, category) => {
         acc[category._id] = category.name;
         return acc;
