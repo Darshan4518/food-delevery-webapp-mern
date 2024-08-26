@@ -1,5 +1,5 @@
 const Order = require("../models/Order.js");
-const redisClient = require("../config/resdis.config.js");
+const redisClient = require("../config/redisConfig.js");
 
 const CACHE_EXPIRATION = 3600; // Cache expiration time in seconds (1 hour)
 
