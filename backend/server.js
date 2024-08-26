@@ -1,10 +1,10 @@
 // server.js
 const dotenv = require("dotenv");
 const express = require("express");
-const connectDB = require("./config/db");
-const categoryRoutes = require("./routes/categoryRoutes");
-const foodRoutes = require("./routes/foodRoutes");
-const orderRoutes = require("./routes/orderRoutes");
+const connectDB = require("./config/db.js");
+const categoryRoutes = require("./routes/categoryRoutes.js");
+const foodRoutes = require("./routes/foodRoutes.js");
+const orderRoutes = require("./routes/orderRoutes.js");
 
 dotenv.config({ path: ".env" });
 
