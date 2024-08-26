@@ -1,19 +1,19 @@
 const Food = require("../models/Food.js");
 const Category = require("../models/Category.js");
-const client = require("../config/redisConfig.js");
+const redisClient = require("../config/redisConfig.js");
 
 const handleError = (res, error, statusCode = 400) => {
   res.status(statusCode).json({ message: error.message });
 };
 
 const setCache = (key, data) => {
-  client.setex(key, 3600, JSON.stringify(data), (err) => {
+  redisClient.setEx(key, 3600, JSON.stringify(data), (err) => {
     if (err) console.error("Error setting cache:", err);
   });
 };
 
 const getCache = (key, callback) => {
-  client.get(key, (err, data) => {
+  redisClient.get(key, (err, data) => {
     if (err) return console.error("Error getting cache:", err);
     callback(data ? JSON.parse(data) : null);
   });
@@ -35,7 +35,7 @@ exports.createFood = async (req, res) => {
     });
     await newFood.save();
     // Invalidate cache
-    client.del("foods");
+    redisClient.del("foods");
     res.status(201).json(newFood);
   } catch (error) {
     handleError(res, error);
@@ -80,7 +80,7 @@ exports.updateFood = async (req, res) => {
 
     await food.save();
     // Invalidate cache
-    client.del("foods");
+    redisClient.del("foods");
     res.status(200).json(food);
   } catch (error) {
     handleError(res, error);
@@ -97,7 +97,7 @@ exports.deleteFood = async (req, res) => {
       return handleError(res, new Error("Food not found"), 404);
     }
     // Invalidate cache
-    client.del("foods");
+    redisClient.del("foods");
     res.status(200).json({ message: "Food deleted" });
   } catch (error) {
     handleError(res, error);
