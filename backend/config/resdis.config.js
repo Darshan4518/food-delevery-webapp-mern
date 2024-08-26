@@ -1,6 +1,6 @@
 const redis = require("redis");
 
-import { createClient } from "redis";
+const createClient = require("redis");
 
 const redisClient = createClient({
   password: "pbNM472fAPdVnf6GcgA3HQN4W9XEPWjR",
