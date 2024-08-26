@@ -1,14 +1,14 @@
 // routes/categoryRoutes.js
 const express = require("express");
 const multer = require("multer");
-const { storage } = require("../config/cloudinaryConfig");
+const { storage } = require("../config/cloudinaryConfig.js");
 const upload = multer({ storage });
 const {
   createCategory,
   updateCategory,
   deleteCategory,
   getCategory,
-} = require("../controllers/categoryController");
+} = require("../controllers/categoryController.js");
 
 const router = express.Router();
 

@@ -7,7 +7,7 @@ const {
   getOrderById,
   deleteOrder,
   updateOrder,
-} = require("../controllers/orderController");
+} = require("../controllers/orderController.js");
 
 router.post("/orders", createOrder);
 router.get("/orders", getOrders);

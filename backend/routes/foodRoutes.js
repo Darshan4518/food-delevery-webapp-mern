@@ -1,7 +1,7 @@
 // routes/foodRoutes.js
 const express = require("express");
 const multer = require("multer");
-const { storage } = require("../config/cloudinaryConfig");
+const { storage } = require("../config/cloudinaryConfig.js");
 const upload = multer({ storage });
 const {
   createFood,
@@ -11,7 +11,7 @@ const {
   getFoodByCategory,
   searchFoodByNameOrCategory,
   searchFoodByPrice,
-} = require("../controllers/foodController");
+} = require("../controllers/foodController.js");
 
 const router = express.Router();
 
