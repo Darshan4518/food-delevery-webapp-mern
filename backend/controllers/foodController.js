@@ -1,13 +1,22 @@
 const Food = require("../models/Food.js");
-const { cloudinary } = require("../config/cloudinaryConfig.js");
 const Category = require("../models/Category.js");
-const redisClient = require("../config/resdis.config.js");
+const client = require("../config/redisConfig.js");
 
-const CACHE_EXPIRATION = 3600; // Cache expiration time in seconds (e.g., 1 hour)
-
-// Helper function for sending errors
 const handleError = (res, error, statusCode = 400) => {
   res.status(statusCode).json({ message: error.message });
+};
+
+const setCache = (key, data) => {
+  client.setex(key, 3600, JSON.stringify(data), (err) => {
+    if (err) console.error("Error setting cache:", err);
+  });
+};
+
+const getCache = (key, callback) => {
+  client.get(key, (err, data) => {
+    if (err) return console.error("Error getting cache:", err);
+    callback(data ? JSON.parse(data) : null);
+  });
 };
 
 // Create a new food item
@@ -25,11 +34,8 @@ exports.createFood = async (req, res) => {
       foodType,
     });
     await newFood.save();
-
-    // Invalidate Redis cache for food and category lists
-    await redisClient.del("foods");
-    await redisClient.del(`foods_by_category:${category}`);
-
+    // Invalidate cache
+    client.del("foods");
     res.status(201).json(newFood);
   } catch (error) {
     handleError(res, error);
@@ -38,76 +44,22 @@ exports.createFood = async (req, res) => {
 
 // Get all food items
 exports.getFood = async (req, res) => {
-  try {
-    // Check if foods are cached in Redis
-    const cachedFoods = await redisClient.get("foods");
-
-    if (cachedFoods) {
-      return res.status(200).json(JSON.parse(cachedFoods));
+  getCache("foods", async (cachedData) => {
+    if (cachedData) {
+      return res.status(200).json(cachedData);
     }
 
-    const foods = await Food.find().lean().populate("category");
-
-    // Cache the result in Redis
-    await redisClient.setEx("foods", CACHE_EXPIRATION, JSON.stringify(foods));
-
-    res.status(200).json(foods);
-  } catch (error) {
-    handleError(res, error);
-  }
-};
-
-// Get food items by category
-exports.getFoodByCategory = async (req, res) => {
-  const { category } = req.query;
-
-  try {
-    let foods;
-
-    // Check Redis cache for the specific category
-    if (category && category !== "All") {
-      const cachedFoods = await redisClient.get(
-        `foods_by_category:${category}`
-      );
-
-      if (cachedFoods) {
-        return res.status(200).json(JSON.parse(cachedFoods));
-      }
-
-      const categoryDoc = await Category.findOne({ name: category }).lean();
-      if (!categoryDoc) {
-        return handleError(res, new Error("Category not found"), 404);
-      }
-      foods = await Food.find({ category: categoryDoc._id })
-        .populate("category")
-        .lean();
-
-      // Cache the result in Redis
-      await redisClient.setEx(
-        `foods_by_category:${category}`,
-        CACHE_EXPIRATION,
-        JSON.stringify(foods)
-      );
-    } else {
-      // For "All" category, check the general foods cache
-      const cachedFoods = await redisClient.get("foods");
-      if (cachedFoods) {
-        return res.status(200).json(JSON.parse(cachedFoods));
-      }
-
-      foods = await Food.find().populate("category").lean();
-
-      // Cache the result in Redis
-      await redisClient.setEx("foods", CACHE_EXPIRATION, JSON.stringify(foods));
+    try {
+      const foods = await Food.find().lean().populate("category");
+      setCache("foods", foods);
+      res.status(200).json(foods);
+    } catch (error) {
+      handleError(res, error);
     }
-
-    res.status(200).json(foods);
-  } catch (error) {
-    handleError(res, error);
-  }
+  });
 };
 
-// Other CRUD operations with cache invalidation (similar pattern)
+// Update an existing food item
 exports.updateFood = async (req, res) => {
   const { id } = req.params;
   const { name, description, price, category, foodType } = req.body;
@@ -127,17 +79,15 @@ exports.updateFood = async (req, res) => {
     if (images) food.images = images;
 
     await food.save();
-
-    // Invalidate Redis cache
-    await redisClient.del("foods");
-    await redisClient.del(`foods_by_category:${category}`);
-
+    // Invalidate cache
+    client.del("foods");
     res.status(200).json(food);
   } catch (error) {
     handleError(res, error);
   }
 };
 
+// Delete a food item
 exports.deleteFood = async (req, res) => {
   const { id } = req.params;
 
@@ -146,13 +96,94 @@ exports.deleteFood = async (req, res) => {
     if (!food) {
       return handleError(res, new Error("Food not found"), 404);
     }
-
-    // Invalidate Redis cache
-    await redisClient.del("foods");
-    await redisClient.del(`foods_by_category:${food.category}`);
-
+    // Invalidate cache
+    client.del("foods");
     res.status(200).json({ message: "Food deleted" });
   } catch (error) {
     handleError(res, error);
   }
+};
+
+// Get food items by category
+exports.getFoodByCategory = async (req, res) => {
+  const { category } = req.query;
+  const cacheKey = `foods_category_${category || "all"}`;
+
+  getCache(cacheKey, async (cachedData) => {
+    if (cachedData) {
+      return res.status(200).json(cachedData);
+    }
+
+    try {
+      let foods;
+      if (category && category !== "All") {
+        const categoryDoc = await Category.findOne({ name: category }).lean();
+        if (!categoryDoc) {
+          return handleError(res, new Error("Category not found"), 404);
+        }
+        foods = await Food.find({ category: categoryDoc._id })
+          .populate("category")
+          .lean();
+      } else {
+        foods = await Food.find().populate("category").lean();
+      }
+      setCache(cacheKey, foods);
+      res.status(200).json(foods);
+    } catch (error) {
+      handleError(res, error);
+    }
+  });
+};
+
+// Search food items by name or category
+exports.searchFoodByNameOrCategory = async (req, res) => {
+  const { query } = req.query;
+  const cacheKey = `foods_search_${query}`;
+
+  getCache(cacheKey, async (cachedData) => {
+    if (cachedData) {
+      return res.status(200).json(cachedData);
+    }
+
+    try {
+      const foods = await Food.find({
+        name: { $regex: query, $options: "i" },
+      })
+        .populate("category")
+        .lean();
+      setCache(cacheKey, foods);
+      res.status(200).json(foods);
+    } catch (error) {
+      handleError(res, error);
+    }
+  });
+};
+
+// Search food items by price range
+exports.searchFoodByPrice = async (req, res) => {
+  const { minPrice, maxPrice } = req.query;
+  const cacheKey = `foods_price_${minPrice || "0"}_${maxPrice || "inf"}`;
+
+  getCache(cacheKey, async (cachedData) => {
+    if (cachedData) {
+      return res.status(200).json(cachedData);
+    }
+
+    try {
+      const queryFilters = {};
+      if (minPrice && !isNaN(minPrice))
+        queryFilters.price = { $gte: parseInt(minPrice) };
+      if (maxPrice && !isNaN(maxPrice))
+        queryFilters.price = {
+          ...queryFilters.price,
+          $lte: parseInt(maxPrice),
+        };
+
+      const foods = await Food.find(queryFilters).populate("category").lean();
+      setCache(cacheKey, foods);
+      res.status(200).json(foods);
+    } catch (error) {
+      handleError(res, error);
+    }
+  });
 };

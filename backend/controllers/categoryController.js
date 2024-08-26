@@ -1,5 +1,5 @@
 const Category = require("../models/Category.js");
-const redisClient = require("../config/resdis.config.js");
+const redisClient = require("../config/resdisConfig.js");
 
 const CACHE_EXPIRATION = 3600; // Cache expiration time in seconds (1 hour)
 
