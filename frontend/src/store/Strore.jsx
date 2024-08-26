@@ -1,5 +1,5 @@
 import axios from "axios";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState, useCallback } from "react";
 
 export const Context = createContext();
 
@@ -13,46 +13,29 @@ const ContextProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
 
   useEffect(() => {
-    fetchFoods();
     fetchCategories();
   }, []);
 
   useEffect(() => {
-    if (selectedCategory === "All") {
-      fetchFoods();
-    } else {
-      fetchSelectedCategoryFood();
-    }
+    fetchFoods(selectedCategory);
   }, [selectedCategory]);
 
-  const fetchFoods = async () => {
+  const fetchFoods = useCallback(async (category) => {
     setLoading(true);
     try {
-      const response = await axios.get(
-        "https://darshan-food-delevery-webapp.onrender.com/api/foods"
-      );
-      setFoods(response.data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+      const url =
+        category === "All"
+          ? "https://darshan-food-delevery-webapp.onrender.com/api/foods"
+          : `https://darshan-food-delevery-webapp.onrender.com/api/foods/filter?category=${category}`;
 
-  const fetchSelectedCategoryFood = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get(
-        `https://darshan-food-delevery-webapp.onrender.com/api/foods/filter?category=${selectedCategory}`
-      );
+      const response = await axios.get(url);
       setFoods(response.data);
-      console.log(response.data);
     } catch (error) {
       console.error(error);
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   const fetchCategories = async () => {
     try {
@@ -79,9 +62,8 @@ const ContextProvider = ({ children }) => {
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
-      } else {
-        return [...prevCart, { ...food, quantity: 1 }];
       }
+      return [...prevCart, { ...food, quantity: 1 }];
     });
   };
 
@@ -104,10 +86,7 @@ const ContextProvider = ({ children }) => {
         loading,
         categories,
         foods,
-        setFoods,
         cart,
-        setCart,
-        fetchFoods,
         addToCart,
         removeFromCart,
         updateCartItemQuantity,
