@@ -34,7 +34,6 @@ exports.createFood = async (req, res) => {
       foodType,
     });
     await newFood.save();
-    // Invalidate cache
     redisClient.del("foods");
     res.status(201).json(newFood);
   } catch (error) {
