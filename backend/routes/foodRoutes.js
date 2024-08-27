@@ -1,4 +1,3 @@
-// routes/foodRoutes.js
 const express = require("express");
 const multer = require("multer");
 const { storage } = require("../config/cloudinaryConfig.js");
