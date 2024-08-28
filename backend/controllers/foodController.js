@@ -39,8 +39,12 @@ exports.getFood = async (req, res) => {
     }
 
     const foods = await Food.find().lean().populate("category");
-    await redisClient.setEx("foods", 3600, JSON.stringify(foods));
     res.status(200).json(foods);
+
+    // Set cache asynchronously
+    redisClient.setEx("foods", 3600, JSON.stringify(foods)).catch((err) => {
+      console.error("Redis setEx failed:", err);
+    });
   } catch (error) {
     handleError(res, error);
   }
