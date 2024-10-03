@@ -4,7 +4,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Darshan-Food-Order README</title>
 </head>
 
 <body>
@@ -14,19 +13,30 @@
   <p><strong>Darshan-Food-Order</strong> is a full-stack food ordering web application built with <strong>React.js</strong>, <strong>Node.js</strong>, <strong>Express</strong>, and <strong>MongoDB</strong>. It allows users to browse food items, place orders, and manage their orders, while providing administrators the ability to manage menus and categories through a comprehensive dashboard.</p>
 
   <h2>Live Demo</h2>
-  <p>Check out the live application: <a href="https://your-live-link-here.com" target="_blank">Live Demo</a></p>
+  <p>Check out the live application: <a href="https://food-order-webapp-mern.vercel.app/" target="_blank">Live Demo</a></p>
 
   <h2>Screenshots</h2>
   <p>Below are some screenshots of the application:</p>
 
   <h3>Home Page</h3>
-  <img src="https://your-screenshot-link.com/homepage.png" alt="Home Page Screenshot" width="600px">
+  
+![Screenshot 2024-10-03 151422](https://github.com/user-attachments/assets/c71bbe55-ccf6-4cdd-92cc-7a6f8c152276)
 
-  <h3>Admin Panel</h3>
-  <img src="https://your-screenshot-link.com/admin-panel.png" alt="Admin Panel Screenshot" width="600px">
+![Screenshot 2024-10-03 151548](https://github.com/user-attachments/assets/293bcffc-bc60-494f-9e6f-9a32332a1fa8)
 
-  <h3>Order Page</h3>
-  <img src="https://your-screenshot-link.com/order-page.png" alt="Order Page Screenshot" width="600px">
+![Screenshot 2024-10-03 151615](https://github.com/user-attachments/assets/a4aea53f-6b18-45ad-b293-7009ab48224f)
+
+![Screenshot 2024-10-03 151644](https://github.com/user-attachments/assets/2cf2341a-1e63-461e-aa01-398e65fc5bad)
+
+![Screenshot 2024-10-03 151738](https://github.com/user-attachments/assets/2dd28cf1-0aa4-45ee-8df7-20a7b3106d6f)
+
+![Screenshot 2024-10-03 151807](https://github.com/user-attachments/assets/2622eff4-5384-4743-a001-9b8ae6c4f66e)
+
+![Screenshot 2024-10-03 151817](https://github.com/user-attachments/assets/5bc2c05d-15ea-4d32-8282-bee5c9036619)
+
+ ![Screenshot 2024-10-03 152033](https://github.com/user-attachments/assets/c1628cd7-524b-42f0-a0de-282f41e524b3)
+ 
+![Screenshot 2024-10-03 152107](https://github.com/user-attachments/assets/06e0dbf6-9bf8-4a18-876b-ad0af408fa6d)
 
   <h2>Features</h2>
 
@@ -87,7 +97,6 @@ npm install
 cd ../frontend
 npm install
     </code></pre>
-
     <li><strong>Set up environment variables:</strong></li>
     <p>Create a <code>.env</code> file in the <code>backend</code> directory and add the following:</p>
     <pre><code>MONGODB_URI=&lt;your-mongodb-uri&gt;
