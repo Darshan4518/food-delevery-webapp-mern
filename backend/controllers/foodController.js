@@ -43,7 +43,7 @@ exports.getFood = async (req, res) => {
 
     // Set cache asynchronously
     redisClient.setEx("foods", 3600, JSON.stringify(foods)).catch((err) => {
-      console.error("Redis setEx failed:", err);
+      return;
     });
   } catch (error) {
     handleError(res, error);

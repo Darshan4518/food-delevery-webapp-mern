@@ -20,7 +20,7 @@ const blogPosts = [
     date: "July 1, 2024",
   },
   {
-    title: "Healthy Eating: Tips and Tricks",
+    title: "Healthy Eating: Tips and Tricks in 2024",
     description:
       "Learn how to maintain a healthy diet while enjoying delicious meals from our delivery service.",
     image:
@@ -72,6 +72,7 @@ const BlogPage = () => {
                 height="200"
                 image={post.image}
                 alt={post.title}
+                className=" max-h-[200px]"
               />
               <CardContent>
                 <Typography variant="h5" component="h2" gutterBottom>

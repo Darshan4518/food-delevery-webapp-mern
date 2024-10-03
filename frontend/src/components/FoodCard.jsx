@@ -3,6 +3,7 @@ import { ClipLoader } from "react-spinners";
 import { motion } from "framer-motion";
 import toast, { Toaster } from "react-hot-toast";
 import { Context } from "../store/Strore";
+import { Skeleton } from "@mui/material";
 
 const FoodCard = ({ foods, loading, categories, show }) => {
   const { addToCart } = useContext(Context);
@@ -12,12 +13,27 @@ const FoodCard = ({ foods, loading, categories, show }) => {
     toast.success(`${food.name} added to cart!`, { autoClose: true });
   };
 
+  const renderSkeleton = () => (
+    <div className="relative overflow-hidden rounded-lg shadow transition w-[300px] bg-slate-100 p-2">
+      <Skeleton variant="rectangular" width="100%" height={200} />
+      <Skeleton variant="text" width="60%" height={20} />
+      <Skeleton variant="text" width="80%" height={15} />
+      <Skeleton variant="text" width="40%" height={15} />
+      <Skeleton variant="rectangular" width="100%" height={36} />
+    </div>
+  );
+
   return (
     <div className="flex flex-wrap gap-4 max-w-full justify-evenly mx-10">
       <Toaster position="top-right" reverseOrder={false} />
+
       {loading ? (
-        <div className="flex justify-center w-full h-screen">
-          <ClipLoader color={"#36D7B7"} loading={loading} size={100} />
+        <div className="flex flex-wrap gap-4 max-w-full justify-evenly mx-10">
+          {Array.from(new Array(4)).map((_, index) => (
+            <motion.div key={index} className="max-w-[300px]">
+              {renderSkeleton()}
+            </motion.div>
+          ))}
         </div>
       ) : foods?.length > 0 ? (
         foods?.slice(show ? show[0] : 0, show ? show[1] : 4).map((food) => (
@@ -44,7 +60,7 @@ const FoodCard = ({ foods, loading, categories, show }) => {
             </div>
             <div className="flex justify-between px-3 items-center">
               <h3 className="font-bold text-gray-700 flex">
-                Price: <p className=" text-gray-500">Rs{food.price}</p>
+                Price: <p className=" text-gray-500">Rs {food.price}</p>
               </h3>
               <h3 className=" font-bold flex items-center text-gray-500">
                 Type:
@@ -70,7 +86,10 @@ const FoodCard = ({ foods, loading, categories, show }) => {
           </motion.div>
         ))
       ) : (
-        <div>Foods Not Available</div>
+        // Render this when no foods are available
+        <div className="flex justify-center w-full">
+          <p className="text-lg font-bold text-gray-700">Foods Not Available</p>
+        </div>
       )}
     </div>
   );

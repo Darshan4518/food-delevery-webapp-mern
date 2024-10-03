@@ -9,9 +9,7 @@ const NewleyAddedDishes = () => {
   return (
     <div className=" ">
       <div className=" flex justify-between items-center mx-10 my-8">
-        <h3 className=" font-bold text-2xl text-gray-600 p-4 ">
-          Newley Added Dishes
-        </h3>
+        <h3 className=" font-bold text-2xl text-gray-600 p-4 ">New Dishes</h3>
         <Link
           className="group flex items-center justify-between gap-2 rounded-lg border border-current px-3 py-2 text-indigo-600 transition-colors hover:bg-indigo-600 focus:outline-none focus:ring active:bg-indigo-500"
           to="/listings"

@@ -17,7 +17,7 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header className="bg-white max-w-screen">
+    <header className="bg-white max-w-screen sticky top-0 z-50 ">
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <div className="md:flex md:items-center md:gap-12">
@@ -27,7 +27,7 @@ const Header = () => {
           </div>
           <div className="hidden md:block">
             <nav aria-label="Global">
-              <ul className="flex items-center gap-6 text-sm">
+              <ul className="flex items-center gap-6 text-sm font-bold">
                 <li>
                   <Link
                     className="text-gray-500 transition hover:text-gray-500/75"

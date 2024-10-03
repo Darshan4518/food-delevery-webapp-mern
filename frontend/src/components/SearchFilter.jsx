@@ -31,7 +31,6 @@ const SearchFilter = () => {
 
   const handleSearch = async (query) => {
     setSearch(query);
-
     try {
       const response = await axios.get(
         `https://darshan-food-delevery-webapp.onrender.com/api/foods/filter/search?query=${query}`
@@ -44,7 +43,7 @@ const SearchFilter = () => {
   };
 
   return (
-    <div className="mb-4 flex items-center justify-end px-3 w-[40%]">
+    <div className="mb-4 flex items-center justify-end px-3 sm:w-[60%] md:w-[40%] w-full my-3 md:my-0">
       <input
         type="text"
         className="border rounded py-2 px-4 w-[100%]"

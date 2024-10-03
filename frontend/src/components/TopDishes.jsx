@@ -6,7 +6,7 @@ import FoodCard from "./FoodCard";
 const TopDishes = () => {
   const { loading, foods, categories } = useContext(Context);
 
-  const shows = [0, 5];
+  const shows = [0, 4];
 
   return (
     <div className=" ">

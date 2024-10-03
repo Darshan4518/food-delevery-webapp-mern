@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -38,7 +38,19 @@ const App = () => {
                 <Route exact path="/" element={<HomePage />}></Route>
                 <Route exact path="*" element={<ErrorPage />}></Route>
 
-                <Route path="/listings" element={<ListingPage />}></Route>
+                <Route
+                  path="/listings"
+                  element={
+                    <>
+                      <SignedIn>
+                        <ListingPage />
+                      </SignedIn>
+                      <SignedOut>
+                        <RedirectToSignIn />
+                      </SignedOut>
+                    </>
+                  }
+                ></Route>
                 <Route
                   path="/cart"
                   element={

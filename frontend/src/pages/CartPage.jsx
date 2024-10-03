@@ -8,7 +8,7 @@ import toast, { Toaster } from "react-hot-toast";
 const CartPage = () => {
   const { cart, removeFromCart, updateCartItemQuantity, setCart } =
     useContext(Context);
-  const [open, setOpen] = useState(false); // State to manage modal open/close
+  const [open, setOpen] = useState(false);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
